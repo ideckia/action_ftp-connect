@@ -2,7 +2,7 @@
 
 ## Definition
 
-Create connections via ftp (it is using Filezilla atm)
+Create connections via ftp (it is using Filezilla by default)
 
 ### Custom name in connection window (filezilla exclusive)
 

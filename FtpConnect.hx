@@ -20,25 +20,32 @@ typedef Props = {
 	var color:{connected:String, disconnected:String};
 }
 
+@:name('ftp-connect')
 class FtpConnect extends IdeckiaAction {
 	var execPath:String;
 
 	var executingProcess:ChildProcessObject;
 
-	override public function init(initialState:ItemState) {
-		if (props.execPath == null) {
-			var envPath = Sys.getEnv('PATH').toLowerCase();
+	override public function init(initialState:ItemState):js.lib.Promise<ItemState> {
+		return new js.lib.Promise((resolve, reject) -> {
+			if (props.execPath == null) {
+				var envPath = Sys.getEnv('PATH').toLowerCase();
 
-			if (envPath.indexOf('filezilla') == -1) {
-				server.dialog(DialogType.Error,
-					'Could not find Filezilla (default) in the PATH enviroment variable. Configure your ftp executable with execPath property.');
-				return;
+				if (envPath.indexOf('filezilla') == -1) {
+					var msg = 'Could not find Filezilla (default) in the PATH enviroment variable. Configure your ftp executable with execPath property.';
+					server.dialog(DialogType.Error, msg);
+					reject(msg);
+				}
+
+				execPath = 'filezilla';
+			} else {
+				execPath = props.execPath;
 			}
 
-			execPath = 'filezilla';
-		} else {
-			execPath = props.execPath;
-		}
+			initialState.bgColor = props.color.disconnected;
+
+			resolve(initialState);
+		});
 	}
 
 	public function execute(currentState:ItemState):js.lib.Promise<ItemState> {
