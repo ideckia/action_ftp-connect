@@ -21,6 +21,7 @@ typedef Props = {
 }
 
 @:name('ftp-connect')
+@:description('Connect to FTP in a simple and fast way.')
 class FtpConnect extends IdeckiaAction {
 	var execPath:String;
 

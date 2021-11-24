@@ -1,0 +1,20 @@
+[
+	{
+		"name": "connect to recalbox",
+		"props": {
+			"isSecure": true,
+			"ftpServer": "::recalbox-ip::",
+			"ftpUser": "root",
+			"ftpPassword": "recalboxroot"
+		}
+	},
+	{
+		"name": "connect to batocera",
+		"props": {
+			"isSecure": true,
+			"ftpServer": "BATOCERA",
+			"ftpUser": "root",
+			"ftpPassword": "linux"
+		}
+	}
+]
