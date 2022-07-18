@@ -34,7 +34,7 @@ class FtpConnect extends IdeckiaAction {
 
 				if (envPath.indexOf('filezilla') == -1) {
 					var msg = 'Could not find Filezilla (default) in the PATH enviroment variable. Configure your ftp executable with execPath property.';
-					server.dialog.error(msg);
+					server.dialog.error('FTP error', msg);
 					reject(msg);
 				}
 
@@ -105,7 +105,7 @@ class FtpConnect extends IdeckiaAction {
 		if (Sys.systemName() == "Windows") {
 			ChildProcess.exec('taskkill /PID ${pid} /T /F', (error, _, _) -> {
 				if (error != null) {
-					server.dialog.error('Error killing process: $error');
+					server.dialog.error('FTP error', 'Error killing process: $error');
 				}
 			});
 		} else {
