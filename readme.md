@@ -20,11 +20,11 @@ Create connections via ftp (it is using Filezilla by default)
 
 | Name | Type | Default | Description | Possible values |
 | ----- |----- | ----- | ----- | ----- |
-| execPath | String | null | Custom FTP executable path. If omitted, will look for 'filezilla' in PATH environment variable. | null |
-| isSecure | Bool | null | Will it use secure connection (sftp)? | null |
-| ftpServer | String | null | The FTP server (with port) | null |
-| ftpUser | String | null | Throgh ftp user | null |
-| ftpPassword | String | null | Throgh ftp password | null |
+| executable_path | String | null | Custom FTP executable path. If omitted, will look for 'filezilla' in PATH environment variable. | null |
+| is_secure | Bool | null | Will it use secure connection (sftp)? | null |
+| ftp_server | String | null | The FTP server (with port) | null |
+| ftp_user | String | null | Throgh ftp user | null |
+| ftp_password | String | null | Throgh ftp password | null |
 | color | { disconnected : String, connected : String } | { connected : 'ff00aa00', disconnected : 'ffaa0000' } | Color definitions | null |
 
 
@@ -38,11 +38,11 @@ Create connections via ftp (it is using Filezilla by default)
         "actions": [{
             "name": "ftp-connect",
             "props": {
-                "execPath": "/alt/path/to/ftp",
-                "isSecure": true,
-                "ftpServer": "my.ftp.host",
-                "ftpUser": "user",
-                "ftpPassword": "securePass"
+                "executable_path": "/alt/path/to/ftp",
+                "is_secure": true,
+                "ftp_server": "my.ftp.host",
+                "ftp_user": "user",
+                "ftp_password": "securePass"
             }
         }]
     }

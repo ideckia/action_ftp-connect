@@ -7,15 +7,15 @@ using api.IdeckiaApi;
 
 typedef Props = {
 	@:editable("Will it use secure connection (sftp)?")
-	var isSecure:Bool;
+	var is_secure:Bool;
 	@:editable("Custom FTP executable path. If omitted, will look for 'filezilla' in PATH environment variable.")
-	var execPath:String;
+	var executable_path:String;
 	@:editable("The FTP server (with port)")
-	var ftpServer:String;
+	var ftp_server:String;
 	@:editable("Throgh ftp user")
-	var ftpUser:String;
+	var ftp_user:String;
 	@:editable("Throgh ftp password")
-	var ftpPassword:String;
+	var ftp_password:String;
 	@:editable("Color definitions", {connected: 'ff00aa00', disconnected: 'ffaa0000'})
 	var color:{connected:String, disconnected:String};
 }
@@ -29,7 +29,7 @@ class FtpConnect extends IdeckiaAction {
 
 	override public function init(initialState:ItemState):js.lib.Promise<ItemState> {
 		return new js.lib.Promise((resolve, reject) -> {
-			if (props.execPath == null) {
+			if (props.executable_path == null) {
 				var envPath = Sys.getEnv('PATH').toLowerCase();
 
 				if (envPath.indexOf('filezilla') == -1) {
@@ -40,7 +40,7 @@ class FtpConnect extends IdeckiaAction {
 
 				execPath = 'filezilla';
 			} else {
-				execPath = props.execPath;
+				execPath = props.executable_path;
 			}
 
 			initialState.bgColor = props.color.disconnected;
@@ -84,19 +84,19 @@ class FtpConnect extends IdeckiaAction {
 
 	function buildCommand() {
 		var cmd = execPath;
-		if (props.isSecure)
+		if (props.is_secure)
 			cmd += ' sftp://';
 		else
 			cmd += ' ftp://';
 
-		if (props.ftpUser != null) {
-			cmd += '${props.ftpUser}';
-			if (props.ftpPassword != null)
-				cmd += ':${props.ftpPassword}';
+		if (props.ftp_user != null) {
+			cmd += '${props.ftp_user}';
+			if (props.ftp_password != null)
+				cmd += ':${props.ftp_password}';
 
 			cmd += '@';
 		}
-		cmd += props.ftpServer;
+		cmd += props.ftp_server;
 
 		return cmd;
 	}
