@@ -51,7 +51,11 @@ class FtpConnect extends IdeckiaAction {
 					executingProcess = null;
 					server.updateClientState(currentState);
 				});
-				executingProcess.on('error', reject);
+				executingProcess.on('error', (error) -> {
+					var msg = 'Error connecting to ftp: $error';
+					server.dialog.error('FTP error', msg);
+					reject(msg);
+				});
 
 				currentState.bgColor = props.color.connected;
 			} else {
