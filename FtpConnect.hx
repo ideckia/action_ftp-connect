@@ -8,7 +8,7 @@ using api.IdeckiaApi;
 typedef Props = {
 	@:editable("Will it use secure connection (sftp)?")
 	var is_secure:Bool;
-	@:editable("Custom FTP executable path. If omitted, will look for 'filezilla' in PATH environment variable.")
+	@:editable("FTP executable path.", "filezilla")
 	var executable_path:String;
 	@:editable("The FTP server (with port)")
 	var ftp_server:String;
@@ -23,26 +23,10 @@ typedef Props = {
 @:name('ftp-connect')
 @:description('Connect to FTP in a simple and fast way.')
 class FtpConnect extends IdeckiaAction {
-	var execPath:String;
-
 	var executingProcess:ChildProcessObject;
 
 	override public function init(initialState:ItemState):js.lib.Promise<ItemState> {
 		return new js.lib.Promise((resolve, reject) -> {
-			if (props.executable_path == null) {
-				var envPath = Sys.getEnv('PATH').toLowerCase();
-
-				if (envPath.indexOf('filezilla') == -1) {
-					var msg = 'Could not find Filezilla (default) in the PATH enviroment variable. Configure your ftp executable with execPath property.';
-					server.dialog.error('FTP error', msg);
-					reject(msg);
-				}
-
-				execPath = 'filezilla';
-			} else {
-				execPath = props.executable_path;
-			}
-
 			initialState.bgColor = props.color.disconnected;
 
 			resolve(initialState);
@@ -51,9 +35,6 @@ class FtpConnect extends IdeckiaAction {
 
 	public function execute(currentState:ItemState):js.lib.Promise<ItemState> {
 		return new js.lib.Promise((resolve, reject) -> {
-			if (execPath == null)
-				reject('No ftp command found. Define it in the action properties (execPath).');
-
 			var options:ChildProcessSpawnOptions = {
 				shell: true,
 				detached: true,
@@ -83,7 +64,7 @@ class FtpConnect extends IdeckiaAction {
 	}
 
 	function buildCommand() {
-		var cmd = execPath;
+		var cmd = props.executable_path;
 		if (props.is_secure)
 			cmd += ' sftp://';
 		else

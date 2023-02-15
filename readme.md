@@ -20,7 +20,7 @@ Create connections via ftp (it is using Filezilla by default)
 
 | Name | Type | Default | Description | Possible values |
 | ----- |----- | ----- | ----- | ----- |
-| executable_path | String | null | Custom FTP executable path. If omitted, will look for 'filezilla' in PATH environment variable. | null |
+| executable_path | String | FTP executable path. | false | "filezilla" | null |
 | is_secure | Bool | null | Will it use secure connection (sftp)? | null |
 | ftp_server | String | null | The FTP server (with port) | null |
 | ftp_user | String | null | Throgh ftp user | null |
