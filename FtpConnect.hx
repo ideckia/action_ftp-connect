@@ -1,5 +1,6 @@
 package;
 
+import api.action.Data;
 import js.node.ChildProcess;
 import js.node.child_process.ChildProcess as ChildProcessObject;
 
@@ -16,24 +17,36 @@ typedef Props = {
 	var ftp_user:String;
 	@:editable("Throgh ftp password")
 	var ftp_password:String;
-	@:editable("Color definitions", {connected: 'ff00aa00', disconnected: 'ffaa0000'})
 	var color:{connected:String, disconnected:String};
 }
 
 @:name('ftp-connect')
 @:description('Connect to FTP in a simple and fast way.')
 class FtpConnect extends IdeckiaAction {
+	static var DEFAULT_COLORS:{
+		connected:String,
+		disconnected:String
+	} = Data.embedJson('colors.json');
+
 	var executingProcess:ChildProcessObject;
 
 	override public function init(initialState:ItemState):js.lib.Promise<ItemState> {
 		return new js.lib.Promise((resolve, reject) -> {
+			if (props.color == null) {
+				var colorData = Data.getJson('colors.json');
+				if (colorData != null)
+					props.color = colorData;
+				else
+					props.color = DEFAULT_COLORS;
+			}
+
 			initialState.bgColor = props.color.disconnected;
 
 			resolve(initialState);
 		});
 	}
 
-	public function execute(currentState:ItemState):js.lib.Promise<ItemState> {
+	public function execute(currentState:ItemState):js.lib.Promise<ActionOutcome> {
 		return new js.lib.Promise((resolve, reject) -> {
 			var options:ChildProcessSpawnOptions = {
 				shell: true,
@@ -63,7 +76,7 @@ class FtpConnect extends IdeckiaAction {
 				currentState.bgColor = props.color.disconnected;
 			}
 
-			resolve(currentState);
+			resolve(new ActionOutcome({state: currentState}));
 		});
 	}
 
