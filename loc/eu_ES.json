@@ -1,0 +1,26 @@
+[
+	{
+		"id": "action_description",
+		"text": "FTP batera modu sinple eta azkarrean konektatu."
+	},
+	{
+		"id": "prop_is_secure",
+		"text": "Konexio segurua erabili (sftp)?"
+	},
+	{
+		"id": "prop_executable_path",
+		"text": "FTP exekutagarriaren bidea."
+	},
+	{
+		"id": "prop_ftp_server",
+		"text": "FTP zerbitzaria (portuarekin)"
+	},
+	{
+		"id": "prop_ftp_user",
+		"text": "FTP erabiltzailea"
+	},
+	{
+		"id": "prop_ftp_password",
+		"text": "FTP pasahitza"
+	}
+]

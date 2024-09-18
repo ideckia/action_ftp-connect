@@ -1,27 +1,27 @@
 package;
 
-import api.action.Data;
 import js.node.ChildProcess;
 import js.node.child_process.ChildProcess as ChildProcessObject;
 
 using api.IdeckiaApi;
 
 typedef Props = {
-	@:editable("Will it use secure connection (sftp)?")
+	@:editable("prop_is_secure")
 	var is_secure:Bool;
-	@:editable("FTP executable path.", "filezilla")
+	@:editable("prop_executable_path", "filezilla")
 	var executable_path:String;
-	@:editable("The FTP server (with port)")
+	@:editable("prop_ftp_server")
 	var ftp_server:String;
-	@:editable("Throgh ftp user")
+	@:editable("prop_ftp_user")
 	var ftp_user:String;
-	@:editable("Throgh ftp password")
+	@:editable("prop_ftp_password")
 	var ftp_password:String;
 	var color:{connected:String, disconnected:String};
 }
 
 @:name('ftp-connect')
-@:description('Connect to FTP in a simple and fast way.')
+@:description('action_description')
+@:localize
 class FtpConnect extends IdeckiaAction {
 	static var DEFAULT_COLORS:{
 		connected:String,
@@ -33,7 +33,7 @@ class FtpConnect extends IdeckiaAction {
 	override public function init(initialState:ItemState):js.lib.Promise<ItemState> {
 		return new js.lib.Promise((resolve, reject) -> {
 			if (props.color == null) {
-				var colorData = Data.getJson('colors.json');
+				var colorData = core.data.getJson('colors.json');
 				if (colorData != null)
 					props.color = colorData;
 				else
@@ -56,17 +56,17 @@ class FtpConnect extends IdeckiaAction {
 
 			if (executingProcess == null) {
 				var cmd = buildCommand();
-				server.log.debug('Connecting with ftp command: [${cmd}]');
+				core.log.debug('Connecting with ftp command: [${cmd}]');
 				executingProcess = ChildProcess.spawn(cmd, options);
 				executingProcess.unref();
 				executingProcess.on('close', () -> {
 					currentState.bgColor = props.color.disconnected;
 					executingProcess = null;
-					server.updateClientState(currentState);
+					core.updateClientState(currentState);
 				});
 				executingProcess.on('error', (error) -> {
 					var msg = 'Error connecting to ftp: $error';
-					server.dialog.error('FTP error', msg);
+					core.dialog.error('FTP error', msg);
 					reject(msg);
 				});
 
@@ -103,7 +103,7 @@ class FtpConnect extends IdeckiaAction {
 		if (Sys.systemName() == "Windows") {
 			ChildProcess.exec('taskkill /PID ${pid} /T /F', (error, _, _) -> {
 				if (error != null) {
-					server.dialog.error('FTP error', 'Error killing process: $error');
+					core.dialog.error('FTP error', 'Error killing process: $error');
 				}
 			});
 		} else {
